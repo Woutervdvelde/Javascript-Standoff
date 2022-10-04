@@ -1,9 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded&family=Open+Sans:wght@400;700&family=Rye&display=swap');
+
+:root {
+    --color-yellow-400: #FFD046;
+    --color-light-400: #fff;
+    --color-dark-600: #210F04;
+    --color-dark-500: #4b2209;
+    --color-dark-400: #75350e;
+    --border-radius-normal: 10px;
+}
+
+.material-symbols-rounded {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
+}
+
 * {
     margin: 0;
     padding: 0;
 }
 
-html, body {
-    height: 100vh;
+html,
+body {
+    height: 100%;
     width: 100vw;
+    background: var(--color-yellow-400);
+}
+
+html,
+body,
+input {
+    color: var(--color-dark-600);
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    font-size: 4em;
+    font-family: 'Rye', cursive;
+}
+
+.spin {
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
