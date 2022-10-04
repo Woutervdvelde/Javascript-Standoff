@@ -5,26 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/base.css" />
-    <link rel="stylesheet" href="styles/create.css" />
-    <title>JS | Create</title>
+    <link rel="stylesheet" href="styles/lobby.css" />
+    <title>JS | Lobby</title>
 </head>
 
 <body>
     <div class="header">
         <h1>Javascript-Standoff</h1>
-        <h2>Create a new lobby</h3>
     </div>
-    <div class="create-container">
-        <h3>Lobby name:</h3>
-        <div>
-            <input id="lobby_name" placeholder="name..." />
-            <button class="btn" id="create_button">Create</button>
+
+
+
+
+    <template id="connection_error_template">
+        <div class="connection-error-container">
+            <h2>Looks like you gun is jammed...<br> try creating a new lobby instead</h2>
+            <a href="/create.html"><button class="btn">Create a lobby</button></a>
         </div>
-        <span id="error_message"></span>
-    </div>
+    </template>
+    
     <script src="/socket.io/socket.io.js"></script>
     <script src="./scripts/util.js"></script>
-    <script src="./scripts/create.js" type="module"></script>
+    <script src="./scripts/lobby.js"></script>
     <script src="./scripts/gyro.js"></script>
 </body>
 

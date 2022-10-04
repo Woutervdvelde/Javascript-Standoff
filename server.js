@@ -16,18 +16,26 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port, () => console.log(`server hosted on port ${port}`));
 
 const lobbyManager = new LobbyManager();
-
 const io = new Server(httpsServer);
+
+io.use((socket, next) => {
+    //verify lobby host
+    if (Object.keys(socket.handshake.auth).length) {
+        const error = new Error("Not authorized");
+        next(error);
+    }
+    next();
+});
+
 io.on('connection', socket => {
     console.log(`${socket.id} connected`);
 
     socket.on('create_lobby', lobby_name => {
         const lobby = lobbyManager.createLobby(lobby_name);
         if (lobby)
-            socket.emit('create_lobby_response', { data: { id: lobby.id } });
+            socket.emit('create_lobby_response', { data: lobby });
         else
             socket.emit('create_lobby_response', { error: "Lobby name is already in use" });
-        console.log(lobbyManager);
     });
 
     socket.on('disconnect', _ => {

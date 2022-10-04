@@ -17,6 +17,7 @@
         'opsz' 48
 }
 
+/* DEFAULT ELEMENTS */
 * {
     margin: 0;
     padding: 0;
@@ -40,6 +41,45 @@ h1 {
     font-size: 4em;
     font-family: 'Rye', cursive;
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* CUSTOM ELEMENTS */
+.btn {
+    padding: 1em;
+    border: none;
+    border-radius: var(--border-radius-normal);
+    background-color: var(--color-dark-600);
+    color: var(--color-light-400);
+    font-size: 1.25em;
+}
+
+.btn:hover {
+    background-color: var(--color-dark-500);
+}
+
+.btn:active {
+    background-color: var(--color-dark-400);
+}
+
+.header {
+    text-align: center;
+    padding: 5em;
+}
+
+
+@media screen and (max-width: 600px) {
+    .header {
+        padding: 2em;
+        font-size: .75em;
+    }
+
+}
+/* ANIMATIONS */
 
 .spin {
     animation: spin 1s ease infinite;

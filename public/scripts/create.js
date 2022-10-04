@@ -4,14 +4,6 @@ const errorElement = document.getElementById("error_message");
 
 const socket = io('', {});
 
-const getSocketResponse = (name) => {
-    return new Promise((resolve, reject) => {
-        socket.on(name, e => {
-            resolve(e);
-        });
-    });
-}
-
 const displayError = (error) => {
     button.innerHTML = 'Create';
     button.disabled = false;
@@ -19,7 +11,9 @@ const displayError = (error) => {
 }
 
 const saveAndRedirectLobby = (data) => {
-
+    localStorage.setItem('lastSocket', socket.id);
+    localStorage.setItem('lobby', JSON.stringify(data));
+    location.href = '/lobby.html';
 }
 
 const tryCreateLoby = async () => {
@@ -28,8 +22,7 @@ const tryCreateLoby = async () => {
     button.disabled = true;
 
     socket.emit('create_lobby', input.value);
-    const response = await getSocketResponse('create_lobby_response');
-    console.log(response);
+    const response = await getSocketResponse(socket, 'create_lobby_response');
     if (response.error)
         displayError(response.error);
     else

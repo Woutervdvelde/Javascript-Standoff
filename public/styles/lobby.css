@@ -1,0 +1,9 @@
+.connection-error-container {
+    text-align: center;
+}
+
+.connection-error-container button {
+    margin-top: 1em;
+    color: var(--color-light-400);
+}
+
