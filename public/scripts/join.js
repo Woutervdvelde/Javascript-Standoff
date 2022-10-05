@@ -20,7 +20,10 @@ const loadLobbies = async () => {
     socket.emit('get_lobbies');
     const lobbies = await getSocketResponse(socket, 'get_lobbies_response');
     lobbyContainer.innerHTML = '';
-    lobbies.forEach(lobby => addLobby(lobby.name, lobby.players.length));
+    if (lobbies.length)
+        lobbies.forEach(lobby => addLobby(lobby.name, lobby.players.length));
+    else
+        lobbyContainer.innerHTML = '<h1 class="no-lobbies-message">0 lobbies</h1>';
 }
 
 
