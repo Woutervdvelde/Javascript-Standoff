@@ -42,7 +42,7 @@
     color: var(--color-light-400);
 }
 
-.lobby-participants-container {
+.lobby-players-container {
     display: flex;
     align-self: flex-end;
     opacity: .9;

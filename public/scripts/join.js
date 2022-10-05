@@ -3,11 +3,11 @@ const lobbyContainer = document.getElementById("lobby_container");
 const lobbyTemplate = document.getElementById("lobby_template");
 const socket = io();
 
-const addLobby = (name, participants) => {
+const addLobby = (name, players) => {
     const element = document.createElement('div');
     element.appendChild(lobbyTemplate.content.cloneNode(true));
     element.querySelector(".lobby-name").innerHTML = name;
-    element.querySelector(".lobby-participants").innerHTML = `${participants}|2`;
+    element.querySelector(".lobby-players").innerHTML = `${players}|2`;
     element.children[0].onclick = () => tryJoinLobby(name);
     lobbyContainer.appendChild(element.children[0]);
 }

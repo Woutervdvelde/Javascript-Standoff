@@ -47,12 +47,18 @@ const returnAllLobbies = (socket) => {
     socket.emit('get_lobbies_response', lobbyManager.lobbies);
 }
 
+const joinLobby = (socket, lobbyName) => {
+    const success = lobbyManager.joinLobby(lobbyName, socket);
+    socket.emit('join_lobby_response', success);
+}
+
 //SOCKET.IO CONNECTION
 io.on('connection', socket => {
     console.log(`${socket.id} connected`);
 
     socket.on('create_lobby', d => createLobby(socket, d));
     socket.on('get_lobbies', d => returnAllLobbies(socket));
+    socket.on('join_lobby', d => joinLobby(socket, d));
 
     socket.on('disconnect', _ => {
         console.log(`${socket.id} disconnected`);

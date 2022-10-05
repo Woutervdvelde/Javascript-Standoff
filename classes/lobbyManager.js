@@ -15,11 +15,11 @@ module.exports = class LobbyManager {
     createLobby(lobbyName, lastHostSocket) {
         if (this.getLobbyByName(lobbyName)) return false;
         const lobby = new Lobby(lobbyName, lastHostSocket);
-        this.addLobby(lobby);
+        this.lobbies.push(lobby);
         return lobby;
     }
 
-    addLobby(lobby) {
-        this.lobbies.push(lobby);
+    joinLobby(lobbyName, socket) {
+        
     }
 }
