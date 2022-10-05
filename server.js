@@ -20,9 +20,16 @@ const io = new Server(httpsServer);
 
 io.use((socket, next) => {
     //verify lobby host
-    if (Object.keys(socket.handshake.auth).length) {
-        const error = new Error("Not authorized");
-        next(error);
+    const auth = socket.handshake.auth;
+    if (Object.keys(auth).length) {
+        const lobby = lobbyManager.getLobbyById(auth.id);
+        console.log(auth);
+        console.log(lobby);
+        if (!lobby || lobby.lastHostSocket != auth.lastHostSocket) {
+            const error = new Error("Not authorized");
+            next(error);
+        } else
+            lobby.lastHostSocket = socket.id;
     }
     next();
 });
@@ -31,7 +38,7 @@ io.on('connection', socket => {
     console.log(`${socket.id} connected`);
 
     socket.on('create_lobby', lobby_name => {
-        const lobby = lobbyManager.createLobby(lobby_name);
+        const lobby = lobbyManager.createLobby(lobby_name, socket.id);
         if (lobby)
             socket.emit('create_lobby_response', { data: lobby });
         else

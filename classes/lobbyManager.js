@@ -8,9 +8,13 @@ module.exports = class LobbyManager {
         return this.lobbies.find(l => l.name == name);
     }
 
-    createLobby(lobby_name) {
-        if (this.getLobbyByName(lobby_name)) return false;
-        const lobby = new Lobby(lobby_name);
+    getLobbyById(id) {
+        return this.lobbies.find(l => l.id == id);
+    }
+
+    createLobby(lobbyName, lastHostSocket) {
+        if (this.getLobbyByName(lobbyName)) return false;
+        const lobby = new Lobby(lobbyName, lastHostSocket);
         this.addLobby(lobby);
         return lobby;
     }
