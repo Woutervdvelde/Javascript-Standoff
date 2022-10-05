@@ -12,10 +12,6 @@ const addLobby = (name, players) => {
     lobbyContainer.appendChild(element.children[0]);
 }
 
-const tryJoinLobby = (name) => {
-    socket.emit('join', name);
-}
-
 const loadLobbies = async () => {
     socket.emit('get_lobbies');
     const lobbies = await getSocketResponse(socket, 'get_lobbies_response');
@@ -26,7 +22,22 @@ const loadLobbies = async () => {
         lobbyContainer.innerHTML = '<h1 class="no-lobbies-message">0 lobbies</h1>';
 }
 
+const denyLobbyJoin = () => {
+    loadLobbies();
+    showToast("An error occured while joining the lobby", 5);
+}
 
+const transferToLobby = (lobby) => {
+    localStorage.setItem('lobby', JSON.stringify(lobby));
+    location.href = './lobby.html';
+}
+
+const tryJoinLobby = async (name) => {
+    socket.emit('join_lobby', name);
+    const response = await getSocketResponse(socket, 'join_lobby_response');
+    if (!response) denyLobbyJoin();
+    else transferToLobby(response);
+}
 
 
 setInterval(loadLobbies, 10 * 1000);

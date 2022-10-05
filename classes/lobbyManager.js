@@ -20,6 +20,9 @@ module.exports = class LobbyManager {
     }
 
     joinLobby(lobbyName, socket) {
-        
+        const lobby = this.getLobbyByName(lobbyName);
+        if (!lobby || lobby.players.length >= 2) return false;
+        lobby.players.push(socket.id);
+        return lobby;
     }
 }

@@ -48,8 +48,8 @@ const returnAllLobbies = (socket) => {
 }
 
 const joinLobby = (socket, lobbyName) => {
-    const success = lobbyManager.joinLobby(lobbyName, socket);
-    socket.emit('join_lobby_response', success);
+    const lobby = lobbyManager.joinLobby(lobbyName, socket);
+    socket.emit('join_lobby_response', lobby);
 }
 
 //SOCKET.IO CONNECTION

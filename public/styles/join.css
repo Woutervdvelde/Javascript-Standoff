@@ -1,6 +1,7 @@
 .container {
     padding: 1em;
     margin: 0 auto;
+    max-width: 50%;
 }
 
 .container-header {
@@ -50,12 +51,17 @@
 
 .no-lobbies-message {
     margin: 1em;
+    grid-column: span 2;
     text-align: center;
     opacity: .5;
 }
 
 
 @media screen and (max-width: 900px) {
+    .container {
+        max-width: 100%;
+    }
+
     #lobby_container {
         grid-template-columns: 1fr;
     }

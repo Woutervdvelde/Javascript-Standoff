@@ -71,6 +71,17 @@ a {
     padding: 5em;
 }
 
+.toast {
+    position: absolute;
+    width: 100%;
+    padding: 1em 0;
+    background-color: var(--color-dark-600);
+    color: var(--color-light-400);
+    text-align: center;
+    transition: transform 1s ease;
+    transform: translateY(-100%);
+}
+
 
 @media screen and (max-width: 600px) {
     .header {
