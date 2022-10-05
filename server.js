@@ -5,6 +5,7 @@ const https = require('https');
 const selfsigned = require('selfsigned');
 const { Server } = require('socket.io');
 
+//HTTPS SERVER
 const app = express();
 const port = 443;
 app.use(express.static('public'));
@@ -18,13 +19,12 @@ httpsServer.listen(port, () => console.log(`server hosted on port ${port}`));
 const lobbyManager = new LobbyManager();
 const io = new Server(httpsServer);
 
+//MIDDLEWARE
 io.use((socket, next) => {
     //verify lobby host
     const auth = socket.handshake.auth;
     if (Object.keys(auth).length) {
         const lobby = lobbyManager.getLobbyById(auth.id);
-        console.log(auth);
-        console.log(lobby);
         if (!lobby || lobby.lastHostSocket != auth.lastHostSocket) {
             const error = new Error("Not authorized");
             next(error);
@@ -34,16 +34,25 @@ io.use((socket, next) => {
     next();
 });
 
+//CONNECTION METHODS
+const createLobby = (socket, lobbyName) => {
+    const lobby = lobbyManager.createLobby(lobbyName, socket.id);
+    if (lobby)
+        socket.emit('create_lobby_response', { data: lobby });
+    else
+        socket.emit('create_lobby_response', { error: "Lobby name is already in use" });
+}
+
+const returnAllLobbies = (socket) => {
+    socket.emit('get_lobbies_response', lobbyManager.lobbies);
+}
+
+//SOCKET.IO CONNECTION
 io.on('connection', socket => {
     console.log(`${socket.id} connected`);
 
-    socket.on('create_lobby', lobby_name => {
-        const lobby = lobbyManager.createLobby(lobby_name, socket.id);
-        if (lobby)
-            socket.emit('create_lobby_response', { data: lobby });
-        else
-            socket.emit('create_lobby_response', { error: "Lobby name is already in use" });
-    });
+    socket.on('create_lobby', d => createLobby(socket, d));
+    socket.on('get_lobbies', d => returnAllLobbies(socket));
 
     socket.on('disconnect', _ => {
         console.log(`${socket.id} disconnected`);
