@@ -29,7 +29,7 @@ const denyLobbyJoin = () => {
 
 const transferToLobby = (lobby) => {
     localStorage.setItem('lobby', JSON.stringify(lobby));
-    location.href = './lobby.html';
+    location.href = './play.html';
 }
 
 const tryJoinLobby = async (name) => {

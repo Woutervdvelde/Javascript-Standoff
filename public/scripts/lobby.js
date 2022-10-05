@@ -14,11 +14,11 @@ const connectionSuccess = () => {
 }
 
 const initializeLobby = () => {
-    const l = JSON.parse(localStorage.getItem('lobby'));
+    lobby = JSON.parse(localStorage.getItem('lobby'));
     const lastHostSocket = localStorage.getItem('lastHostSocket');
-    if (!l) location.href = '/create.html';
+    if (!lobby) location.href = '/create.html';
 
-    socket = io({ auth: { id: l.id, lastHostSocket:  lastHostSocket} });
+    socket = io({ auth: { id: lobby.id, lastHostSocket:  lastHostSocket} });
     socket.on("connect_error", showConnectionError);
     socket.on("connect", connectionSuccess);
 }

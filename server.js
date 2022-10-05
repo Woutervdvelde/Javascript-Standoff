@@ -25,9 +25,14 @@ io.use((socket, next) => {
     const auth = socket.handshake.auth;
     if (Object.keys(auth).length) {
         const lobby = lobbyManager.getLobbyById(auth.id);
-        if (!lobby || lobby.lastHostSocket != auth.lastHostSocket) {
-            const error = new Error("Not authorized");
-            next(error);
+        if (!lobby) next(new Error('Incorrect lobby'));
+        if (lobby.lastHostSocket != auth.lastHostSocket) {
+            if (lobby.players.includes(socket.id))
+                next();
+            else {
+                const error = new Error("Not authorized");
+                next(error);
+            }
         } else
             lobby.lastHostSocket = socket.id;
     }
