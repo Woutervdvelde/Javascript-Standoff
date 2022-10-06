@@ -6,7 +6,7 @@ const getSocketResponse = (socket, name) => {
     });
 }
 
-const showToast = (message, seconds) => {
+const showToast = (message, seconds = 5) => {
     const element = document.createElement('div');
     element.classList.add('toast');
     element.innerText = message;

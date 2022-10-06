@@ -24,11 +24,12 @@ const loadLobbies = async () => {
 
 const denyLobbyJoin = () => {
     loadLobbies();
-    showToast("An error occured while joining the lobby", 5);
+    showToast("An error occured while joining the lobby");
 }
 
 const transferToLobby = (lobby) => {
     localStorage.setItem('lobby', JSON.stringify(lobby));
+    localStorage.setItem('lastPlayerSocket', JSON.stringify(socket.id));
     location.href = './play.html';
 }
 

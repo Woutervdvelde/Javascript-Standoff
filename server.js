@@ -25,16 +25,25 @@ io.use((socket, next) => {
     const auth = socket.handshake.auth;
     if (Object.keys(auth).length) {
         const lobby = lobbyManager.getLobbyById(auth.id);
-        if (!lobby) next(new Error('Incorrect lobby'));
-        if (lobby.lastHostSocket != auth.lastHostSocket) {
-            if (lobby.players.includes(socket.id))
-                next();
-            else {
-                const error = new Error("Not authorized");
-                next(error);
-            }
-        } else
-            lobby.lastHostSocket = socket.id;
+        if (!lobby) return next(new Error('Incorrect lobby'));
+
+        if (auth.type == 'host')
+            if (lobby.lastHostSocket != auth.lastHostSocket)
+                    return next(new Error("Not authorized as host"));
+            else
+                lobby.setHostSocket(socket.id);
+        
+        console.log(auth);
+        console.log(lobby);
+
+        if (auth.type == 'player') {
+            console.log(lobby.players.length);
+            console.log(lobby.players[0]);
+            if (!lobby.players.includes(auth.lastPlayerSocket))
+                return next(new Error("Not authorized as player"));
+            else
+                lobby.replacePlayer(auth.lastPlayerSocket, socket.id);
+        }
     }
     next();
 });
@@ -57,6 +66,10 @@ const joinLobby = (socket, lobbyName) => {
     socket.emit('join_lobby_response', lobby);
 }
 
+const handleDisconnect = (socket) => {
+    lobbyManager.tryRemovePlayer(socket.id);
+}
+
 //SOCKET.IO CONNECTION
 io.on('connection', socket => {
     console.log(`${socket.id} connected`);
@@ -67,5 +80,6 @@ io.on('connection', socket => {
 
     socket.on('disconnect', _ => {
         console.log(`${socket.id} disconnected`);
+        handleDisconnect(socket);
     });
 });
