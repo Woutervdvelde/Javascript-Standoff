@@ -1,3 +1,4 @@
+const form = document.querySelector("form");
 const input = document.getElementById("lobby_name");
 const button = document.getElementById("create_button");
 const errorElement = document.getElementById("error_message");
@@ -16,7 +17,8 @@ const saveAndRedirectLobby = (data) => {
     location.href = '/lobby.html';
 }
 
-const tryCreateLoby = async () => {
+const tryCreateLoby = async (e) => {
+    e.preventDefault();
     errorElement.innerText = '';
     button.innerHTML = `<span class='material-symbols-rounded spin'>settings</span>`;
     button.disabled = true;
@@ -29,4 +31,4 @@ const tryCreateLoby = async () => {
         saveAndRedirectLobby(response.data);
 }
 
-button.onclick = tryCreateLoby;
+form.onsubmit = tryCreateLoby;

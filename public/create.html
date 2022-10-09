@@ -16,10 +16,10 @@
     </div>
     <div class="create-container">
         <h3>Lobby name:</h3>
-        <div>
+        <form>
             <input id="lobby_name" placeholder="name..." />
-            <button class="btn" id="create_button">Create</button>
-        </div>
+            <button class="btn" id="create_button" type="submit">Create</button>
+        </form>
         <span id="error_message"></span>
     </div>
     <script src="/socket.io/socket.io.js"></script>

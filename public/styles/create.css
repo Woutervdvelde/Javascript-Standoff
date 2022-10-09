@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-.create-container>div {
+.create-container>form {
     display: grid;
     grid-template-columns: 5fr 1fr;
 }
@@ -43,7 +43,7 @@
         margin: 0 2em;
     }
 
-    .create-container>div {
+    .create-container>form {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr;
         gap: 1em;
