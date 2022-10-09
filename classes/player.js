@@ -3,9 +3,10 @@ module.exports = class Player {
         this.id = this._generateId();
         this.socketId = id;
         this.connected = false;
+        this.timeout = null;
     }
 
     _generateId() {
-        return `${Date.now()} + ${Math.floor(Math.random() * 100000)}`;
+        return `${Date.now()}${Math.floor(Math.random() * 100000)}`;
     }
 }

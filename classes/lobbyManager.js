@@ -15,9 +15,7 @@ module.exports = class LobbyManager {
     }
 
     getLobbyByPlayer(playerId) {
-        return this.lobbies.find(l => {
-            if (l.players[playerId]) return { lobby: l, player: player };
-        }) ?? { lobby: undefined, player: undefined };
+        return this.lobbies.find(l => l.players[playerId]);
     }
 
     getAllLobbiesResponse() {
@@ -33,18 +31,41 @@ module.exports = class LobbyManager {
 
     joinLobby(lobbyName, socket) {
         const lobby = this.getLobbyByName(lobbyName);
-        if (!lobby || Object.keys(lobby.players).length >= 2) return false;
+        if (!lobby || Object.keys(lobby.players).length >= 2)
+            //returning empty lobby
+            return { lobby: Lobby.Empty(), player: undefined };
+
         const player = new Player(socket.id);
-        lobby.players[player] = player;
-        return lobby;
+        lobby.players[player.id] = player;
+
+        return { lobby: lobby, player: player };
     }
 
-    tryRemovePlayer(socketId) {
-        const { lobby, player } = this.getLobbyByPlayer(socketId);
-        console.log(lobby);
-        if (!lobby || !player.connected) return false;
+    connectPlayer(playerId) {
+        const lobby = this.getLobbyByPlayer(playerId);
+        if (!lobby) return;
 
-        lobby.players.splice(lobby.players.indexOf(player), 1);
+        const player = lobby.players[playerId];
+        player.connected = true;
+        clearTimeout(player.timeout);
+    }
+
+    disconnectPlayer(playerId) {
+        const lobby = this.getLobbyByPlayer(playerId);
+        if (!lobby) return;
+            
+        const player = lobby.players[playerId];
+        player.connected = false;
+        player.timeout = setTimeout(() => 
+            this.removePlayer(playerId), 10 * 1000
+        );
+    }
+
+    removePlayer(playerId) {
+        const lobby = this.getLobbyByPlayer(playerId);
+        if (!lobby || lobby.players[playerId].connected) return;
+
+        delete lobby.players[playerId];
         return true;
     }
 }

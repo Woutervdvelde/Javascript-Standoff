@@ -27,16 +27,17 @@ const denyLobbyJoin = () => {
     showToast("An error occured while joining the lobby", 5);
 }
 
-const transferToLobby = (lobby) => {
-    localStorage.setItem('lobby', JSON.stringify(lobby));
+const transferToLobby = (data) => {
+    localStorage.setItem('lobby', JSON.stringify(data.lobby));
     localStorage.setItem('lastPlayerSocket', socket.id);
+    localStorage.setItem('playerId', data.player.id);
     location.href = './play.html';
 }
 
 const tryJoinLobby = async (name) => {
     socket.emit('join_lobby', name);
     const response = await getSocketResponse(socket, 'join_lobby_response');
-    if (!response) denyLobbyJoin();
+    if (!response.lobby.id) denyLobbyJoin();
     else transferToLobby(response);
 }
 

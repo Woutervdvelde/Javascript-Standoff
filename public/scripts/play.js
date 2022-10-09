@@ -16,8 +16,16 @@ const initializeLobby = () => {
     if (!lobby) location.href = "/join.html";
 
     const lastPlayerSocket = localStorage.getItem('lastPlayerSocket');
+    const playerId = localStorage.getItem("playerId");
 
-    socket = io({ auth: { id: lobby.id, lastSocket: lastPlayerSocket, type: 'player' } });
+    socket = io({
+        auth: {
+            type: 'player',
+            id: lobby.id,
+            lastSocket: lastPlayerSocket,
+            playerId: playerId
+        }
+    });
     socket.on("connect_error", data => showConnectionError(data));
     socket.on("connect", connectionSuccess);
 }

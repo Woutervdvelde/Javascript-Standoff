@@ -34,10 +34,12 @@ io.use((socket, next) => {
                 lobby.lastHostSocket = socket.id;
 
         if (auth.type == 'player')
-            if (!lobby.players.find(p => p.socketId == auth.lastSocket))
+            if (!lobby.players[auth.playerId])
                 next(new Error("Not authorized as player"));
-            else
-                lobby.changePlayerSocket(auth.lastSocket, socket.id);
+            else {
+                socket.playerId = auth.playerId;
+                lobbyManager.connectPlayer(auth.playerId);
+            }
     }
     next();
 });
@@ -56,12 +58,18 @@ const returnAllLobbies = (socket) => {
 }
 
 const joinLobby = (socket, lobbyName) => {
-    const lobby = lobbyManager.joinLobby(lobbyName, socket);
-    socket.emit('join_lobby_response', lobby ? lobby.toResponse() : false);
+    const { lobby, player } = lobbyManager.joinLobby(lobbyName, socket);
+    socket.emit('join_lobby_response', { lobby: lobby.toResponse(), player: player });
+}
+
+const disconnectPlayer = (socket) => {
 }
 
 const handleDisconnect = (socket) => {
-    let player = lobbyManager.tryRemovePlayer(socket.id);
+    console.log(`${socket.id} disconnected`);
+    if (socket.playerId)
+        lobbyManager.disconnectPlayer(socket.playerId);
+
 }
 
 //SOCKET.IO CONNECTION
