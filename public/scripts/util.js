@@ -12,7 +12,7 @@ const showToast = (message, seconds) => {
     element.innerText = message;
     document.body.insertAdjacentElement('afterbegin', element);
     
-    setTimeout(() => element.style.transform = "translateY(0)", 0);
-    setTimeout(() => element.style.transform = "translateY(-100%)", (seconds - 1) * 1000);
+    setTimeout(() => element.style.transform = "translateY(0)", 1);
+    setTimeout(() => element.style.transform = "translateY(-100%)", (seconds - .5) * 1000);
     setTimeout(() => document.body.removeChild(element), seconds * 1000);
 }

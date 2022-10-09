@@ -57,7 +57,11 @@ const returnAllLobbies = (socket) => {
 
 const joinLobby = (socket, lobbyName) => {
     const lobby = lobbyManager.joinLobby(lobbyName, socket);
-    socket.emit('join_lobby_response', lobby.toResponse());
+    socket.emit('join_lobby_response', lobby ? lobby.toResponse() : false);
+}
+
+const handleDisconnect = (socket) => {
+    let player = lobbyManager.tryRemovePlayer(socket.id);
 }
 
 //SOCKET.IO CONNECTION
@@ -68,7 +72,5 @@ io.on('connection', socket => {
     socket.on('get_lobbies', d => returnAllLobbies(socket));
     socket.on('join_lobby', d => joinLobby(socket, d));
 
-    socket.on('disconnect', _ => {
-        console.log(`${socket.id} disconnected`);
-    });
+    socket.on('disconnect', _ => handleDisconnect(socket));
 });
