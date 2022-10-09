@@ -34,7 +34,7 @@ io.use((socket, next) => {
                 lobby.lastHostSocket = socket.id;
 
         if (auth.type == 'player')
-            if (!lobby.players.includes(auth.lastSocket))
+            if (!lobby.players.find(p => p.socketId == auth.lastSocket))
                 next(new Error("Not authorized as player"));
             else
                 lobby.changePlayerSocket(auth.lastSocket, socket.id);

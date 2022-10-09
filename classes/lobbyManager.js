@@ -16,8 +16,7 @@ module.exports = class LobbyManager {
 
     getLobbyByPlayer(playerId) {
         return this.lobbies.find(l => {
-            const player = l.players.find(p => p.socketId == playerId);
-            if (player) return { lobby: l, player: player };
+            if (l.players[playerId]) return { lobby: l, player: player };
         }) ?? { lobby: undefined, player: undefined };
     }
 
@@ -34,8 +33,9 @@ module.exports = class LobbyManager {
 
     joinLobby(lobbyName, socket) {
         const lobby = this.getLobbyByName(lobbyName);
-        if (!lobby || lobby.players.length >= 2) return false;
-        lobby.players.push(new Player(socket.id));
+        if (!lobby || Object.keys(lobby.players).length >= 2) return false;
+        const player = new Player(socket.id);
+        lobby.players[player] = player;
         return lobby;
     }
 

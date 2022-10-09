@@ -5,11 +5,10 @@ module.exports = class Lobby {
         this.id = `${Math.floor(Math.random() * 1000000)}${Date.now()}`;
         this.name = name;
         this.lastHostSocket = lastHostSocket;
-        this.players = [];
+        this.players = {};
     }
 
-    changePlayerSocket(oldSocket, newSocket) {
-        if (!this.players.includes(oldSocket)) return;
+    changePlayerSocket(oldSocketId, newSocketId) {
         this.players.splice(this.players.indexOf(oldSocket), 1, newSocket);
     }
 
