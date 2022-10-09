@@ -1,9 +1,9 @@
 let lobby, socket;
 
 
-const showConnectionError = (e) => {
-    console.log(e);
-    // location.href = "/join.html";
+const showConnectionError = (data) => {
+    console.log(data);
+    location.href = "/join.html";
 }
 
 const connectionSuccess = () => {
@@ -16,8 +16,9 @@ const initializeLobby = () => {
     if (!lobby) location.href = "/join.html";
 
     const lastPlayerSocket = localStorage.getItem('lastPlayerSocket');
-    socket = io({ auth: { id: lobby.id, type: 'player', lastPlayerSocket: lastPlayerSocket } });
-    socket.on("connect_error", showConnectionError);
+
+    socket = io({ auth: { id: lobby.id, lastSocket: lastPlayerSocket, type: 'player' } });
+    socket.on("connect_error", data => showConnectionError(data));
     socket.on("connect", connectionSuccess);
 }
 

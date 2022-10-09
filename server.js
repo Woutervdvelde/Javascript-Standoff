@@ -25,25 +25,19 @@ io.use((socket, next) => {
     const auth = socket.handshake.auth;
     if (Object.keys(auth).length) {
         const lobby = lobbyManager.getLobbyById(auth.id);
-        if (!lobby) return next(new Error('Incorrect lobby'));
+        if (!lobby) next(new Error('Incorrect lobby'));
 
         if (auth.type == 'host')
-            if (lobby.lastHostSocket != auth.lastHostSocket)
-                    return next(new Error("Not authorized as host"));
+            if (lobby.lastHostSocket != auth.lastSocket)
+                next(new Error("Not authorized as host"));
             else
-                lobby.setHostSocket(socket.id);
-        
-        console.log(auth);
-        console.log(lobby);
+                lobby.lastHostSocket = socket.id;
 
-        if (auth.type == 'player') {
-            console.log(lobby.players.length);
-            console.log(lobby.players[0]);
-            if (!lobby.players.includes(auth.lastPlayerSocket))
-                return next(new Error("Not authorized as player"));
+        if (auth.type == 'player')
+            if (!lobby.players.includes(auth.lastSocket))
+                next(new Error("Not authorized as player"));
             else
-                lobby.replacePlayer(auth.lastPlayerSocket, socket.id);
-        }
+                lobby.changePlayerSocket(auth.lastSocket, socket.id);
     }
     next();
 });
@@ -66,10 +60,6 @@ const joinLobby = (socket, lobbyName) => {
     socket.emit('join_lobby_response', lobby);
 }
 
-const handleDisconnect = (socket) => {
-    lobbyManager.tryRemovePlayer(socket.id);
-}
-
 //SOCKET.IO CONNECTION
 io.on('connection', socket => {
     console.log(`${socket.id} connected`);
@@ -80,6 +70,5 @@ io.on('connection', socket => {
 
     socket.on('disconnect', _ => {
         console.log(`${socket.id} disconnected`);
-        handleDisconnect(socket);
     });
 });

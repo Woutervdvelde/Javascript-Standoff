@@ -1,8 +1,9 @@
 const Lobby = require("./lobby");
 
 module.exports = class LobbyManager {
-    lobbies = [];
-    constructor() {}
+    constructor() {
+        this.lobbies = [];
+    }
 
     getLobbyByName(name) {
         return this.lobbies.find(l => l.name == name);
@@ -10,10 +11,6 @@ module.exports = class LobbyManager {
 
     getLobbyById(id) {
         return this.lobbies.find(l => l.id == id);
-    }
-
-    getLobbyByPlayer(socketId) {
-        return this.lobbies.find(l => l.players.includes(socketId));
     }
 
     createLobby(lobbyName, lastHostSocket) {
@@ -26,15 +23,7 @@ module.exports = class LobbyManager {
     joinLobby(lobbyName, socket) {
         const lobby = this.getLobbyByName(lobbyName);
         if (!lobby || lobby.players.length >= 2) return false;
-        lobby.addPlayer(socket.id);
-        console.log('joined lobby, new lobby structure:');
-        console.log(lobby)
+        lobby.players.push(socket.id);
         return lobby;
-    }
-
-    tryRemovePlayer(socketId) {
-        const lobby = this.getLobbyByPlayer(socketId);
-        if (!lobby) return;
-        lobby.players.splice(lobby.players.indexOf(socketId), 1);
     }
 }

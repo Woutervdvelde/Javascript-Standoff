@@ -11,8 +11,8 @@ const displayError = (error) => {
 }
 
 const saveAndRedirectLobby = (data) => {
-    localStorage.setItem('lastHostSocket', socket.id);
     localStorage.setItem('lobby', JSON.stringify(data));
+    localStorage.setItem('lastHostSocket', socket.id);
     location.href = '/lobby.html';
 }
 

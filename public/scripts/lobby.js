@@ -18,7 +18,7 @@ const initializeLobby = () => {
     const lastHostSocket = localStorage.getItem('lastHostSocket');
     if (!lobby) location.href = '/create.html';
 
-    socket = io({ auth: { id: lobby.id, type: 'host', lastHostSocket:  lastHostSocket} });
+    socket = io({ auth: { id: lobby.id, lastSocket: lastHostSocket, type: 'host' } });
     socket.on("connect_error", showConnectionError);
     socket.on("connect", connectionSuccess);
 }
