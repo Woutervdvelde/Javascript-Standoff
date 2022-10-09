@@ -12,4 +12,9 @@ module.exports = class Lobby {
         if (!this.players.includes(oldSocket)) return;
         this.players.splice(this.players.indexOf(oldSocket), 1, newSocket);
     }
+
+    //used to remove sensitive information for end user
+    toResponse() {
+        return { id: this.id, name: this.name, players: this.players.map(p => 'player') };
+    }
 }

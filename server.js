@@ -46,18 +46,18 @@ io.use((socket, next) => {
 const createLobby = (socket, lobbyName) => {
     const lobby = lobbyManager.createLobby(lobbyName, socket.id);
     if (lobby)
-        socket.emit('create_lobby_response', { data: lobby });
+        socket.emit('create_lobby_response', { data: lobby.toResponse() });
     else
         socket.emit('create_lobby_response', { error: "Lobby name is already in use" });
 }
 
 const returnAllLobbies = (socket) => {
-    socket.emit('get_lobbies_response', lobbyManager.lobbies);
+    socket.emit('get_lobbies_response', lobbyManager.getAllLobbiesResponse());
 }
 
 const joinLobby = (socket, lobbyName) => {
     const lobby = lobbyManager.joinLobby(lobbyName, socket);
-    socket.emit('join_lobby_response', lobby);
+    socket.emit('join_lobby_response', lobby.toResponse());
 }
 
 //SOCKET.IO CONNECTION

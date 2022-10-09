@@ -13,6 +13,10 @@ module.exports = class LobbyManager {
         return this.lobbies.find(l => l.id == id);
     }
 
+    getAllLobbiesResponse() {
+        return this.lobbies.map(l => l.toResponse());
+    }
+
     createLobby(lobbyName, lastHostSocket) {
         if (this.getLobbyByName(lobbyName)) return false;
         const lobby = new Lobby(lobbyName, lastHostSocket);
