@@ -1,0 +1,21 @@
+.p-1 {
+    width: 50%;
+    position: relative;
+}
+
+.p-1 .torso {
+    position: absolute;
+    z-index: 2;
+    left: -150px;
+}
+
+.p-1 .arm {
+    position: absolute;
+    z-index: 1;
+    top: 300px;
+    left: 125px;
+    transform-origin: top left;
+    transform: rotate(.2turn);
+    /* transform: rotate(1turn); */
+    transition: all .5s ease;
+}
